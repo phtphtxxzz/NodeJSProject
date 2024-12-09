@@ -12,19 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const imageResize_1 = require("./../../imageResize");
+const imageResize_1 = __importDefault(require("./../../imageResize"));
 const express_1 = __importDefault(require("express"));
 const images = express_1.default.Router();
 images.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { width, height, filename } = req.query;
-    if (isNaN(Number(width)) || isNaN(Number(height))) {
-        res.status(400).send("width and height must be number");
-    }
     const imgWidth = parseInt(width);
     const imgHeight = parseInt(height);
     const imgName = filename;
     try {
-        const outputPath = yield (0, imageResize_1.ImageResize)(imgName, imgWidth, imgHeight);
+        if (yield imageResize_1.default.CheckImageExist(imgName)) {
+            res.status(400).send("Image doesn't exist");
+        }
+        const outputPath = yield imageResize_1.default.ResizeImage(imgName, imgWidth, imgHeight);
         res.sendFile(outputPath);
     }
     catch (error) {

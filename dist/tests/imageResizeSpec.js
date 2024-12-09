@@ -15,14 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const imageResize_1 = __importDefault(require("./../imageResize"));
 describe("Resize Image", () => {
+    it("check if image exist", () => __awaiter(void 0, void 0, void 0, function* () {
+        const checkExist = yield imageResize_1.default.CheckImageExist("brazil");
+        expect(checkExist).toBeTrue();
+    }));
     it("should resize image and create true link", () => __awaiter(void 0, void 0, void 0, function* () {
-        const outputPath = yield (0, imageResize_1.default)("argentisna", 50, 50);
+        const outputPath = yield imageResize_1.default.ResizeImage("brazil", 50, 50);
         let checkImage = false;
         try {
             yield fs_1.promises.access(outputPath);
             checkImage = true;
         }
         catch (_a) { }
-        expect(checkImage).not.toBeFalse();
+        expect(checkImage).toBeTrue();
     }));
 });
